@@ -1,0 +1,10 @@
+@font-face{
+	font-family: 'TickerTape';
+ 	src: url('../fonts/TickerTape/TickerTape.eot');
+  src: url('../fonts/TickerTape/TickerTape.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/TickerTape/TickerTape.woff') format('woff'),
+       url('../fonts/TickerTape/TickerTape.ttf') format('truetype'),
+       url('../fonts/TickerTape/TickerTape.svg#pacificoregular') format('svg');
+   font-weight: normal;
+   font-style: normal;
+}
