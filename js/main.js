@@ -8,7 +8,7 @@ var dress_list = [
 		season: "весна-лето",
 		brand: "ray",
 		image: "img/dress1.jpg",
-		price: "14000",
+		price: 14000,
 		size: ['35 ', '37 ', '39 ', '41 ']	
 	},
 	{
@@ -17,7 +17,7 @@ var dress_list = [
 		season: "зима-осень",
 		brand: "estaline",
 		image: "img/dress2.jpg",
-		price: "10000",
+		price: 10000,
 		size: ['35 ', '37 ', '39 ', '41 ']
 	},
 	{
@@ -26,7 +26,7 @@ var dress_list = [
 		season: "весна-лето",
 		brand: "ladyform",
 		image: "img/dress3.jpg",
-		price: "15990",
+		price: 15990,
 		size: ['35 ', '37 ', '39 ', '41 ']	
 	},
 	{	
@@ -35,7 +35,7 @@ var dress_list = [
 		season: "зима-осень",
 		brand: "panas",
 		image: "img/dress1.jpg",
-		price: "90900",
+		price: 90900,
 		size: ['35 ', '37 ', '39 ', '41 ']
 	},
     {
@@ -44,7 +44,7 @@ var dress_list = [
 		season: "зима-осень",
 		brand: "dejavu",
 		image: "img/dress2.jpg",
-		price: "90900",
+		price: 90900,
 		size: ['35 ', '37 ', '39 ', '41 ']
 	},
     {	
@@ -53,7 +53,7 @@ var dress_list = [
 		season: "зима-осень",
 		brand: "ertu",
 		image: "img/dress3.jpg",
-		price: "90900",
+		price: 90900,
 		size: ['35 ', '37 ', '39 ', '41 ']
 	}
 ];
@@ -71,6 +71,8 @@ var order = {
 
 var View = React.createClass({
 	
+	onAddToCart: function() {},
+	
 	getInitialState: function() {
 		return{
 			order: this.props.order,
@@ -80,10 +82,10 @@ var View = React.createClass({
 	},
 	
 	priceClick: function() {
-		this.setState({
-			orderName: order.orderName.push(name),
-			//orderPrice: order.orderPrice.push(price)
-		})
+		this.props.onAddToCart(
+			this.props.data.name,
+			this.props.data.price
+		);
 	},
 
 	render: function() {
@@ -114,12 +116,20 @@ var View = React.createClass({
 });
 
 var DressList = React.createClass({
+	
+	addToCart: function(name, price) {
+		this.props.onAddToCart(
+			name,
+			price
+		);
+	},
 
 	render: function() {
 
         var category = this.props.category;
         var value = this.props.value;
 		var data = this.props.data;
+		var self = this
 
 		var dressTemplate = data.map(function(item, index) {
 
@@ -129,7 +139,7 @@ var DressList = React.createClass({
 
 			return (
 				<li key = {index} >
-					<View data = {item} />	
+					<View data = {item} onAddToCart = {self.addToCart} />	
 				</li>
 			)	
 		});        	
@@ -179,7 +189,7 @@ var Li = React.createClass({
 
 var Nav = React.createClass({
 	
-	basketClick: function() {
+	cartClick: function() {
 		
 	},
 
@@ -284,7 +294,15 @@ var App = React.createClass({
             value: value
         });
     },
-
+	
+	addToCart: function(name, price) {
+		order.orderName.push(name);
+		order.orderPrice.push(price);
+			this.setState({
+				order: order
+			});
+	},
+	
 	render: function() { 	
 		return (
 			<div className = "app">
@@ -297,7 +315,8 @@ var App = React.createClass({
 				    category={this.state.category} 
 				    value={this.state.value} 	
 					order = {order} 
-					order = {this.state.order} />
+					order = {this.state.order}
+					onAddToCart = {this.addToCart} />
                 </article>
 			</div>
 		)
