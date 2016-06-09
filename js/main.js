@@ -3,81 +3,91 @@ console.log(ReactDOM);
 
 var dress_list = [
 	{
-		id: 0,
 		name: "parasha",
 		style: "коктейльное",
 		season: "весна-лето",
 		brand: "ray",
 		image: "img/dress1.jpg",
-		price: "14000р",
+		price: "14000",
 		size: ['35 ', '37 ', '39 ', '41 ']	
 	},
 	{
-		id: 1,
 		name: "topolya",
 		style: "коктейльное",
 		season: "зима-осень",
 		brand: "estaline",
 		image: "img/dress2.jpg",
-		price: "10000р",
+		price: "10000",
 		size: ['35 ', '37 ', '39 ', '41 ']
 	},
-	{	
-		id: 2,
+	{
 		name: "opaa",
 		style: "вечернее",
 		season: "весна-лето",
 		brand: "ladyform",
 		image: "img/dress3.jpg",
-		price: "15990р",
+		price: "15990",
 		size: ['35 ', '37 ', '39 ', '41 ']	
 	},
 	{	
-		id: 3,
 		name: "diadema",
 		style: "этно",
 		season: "зима-осень",
 		brand: "panas",
 		image: "img/dress1.jpg",
-		price: "90900р",
+		price: "90900",
 		size: ['35 ', '37 ', '39 ', '41 ']
 	},
     {
-		id: 4,
 	    name: "wonderdris",
 		style: "спортивный",
 		season: "зима-осень",
 		brand: "dejavu",
 		image: "img/dress2.jpg",
-		price: "90900р",
+		price: "90900",
 		size: ['35 ', '37 ', '39 ', '41 ']
 	},
     {	
-		id: 5,
 		name: "insidehole",
 		style: "ретро",
 		season: "зима-осень",
 		brand: "ertu",
 		image: "img/dress3.jpg",
-		price: "90900р",
+		price: "90900",
 		size: ['35 ', '37 ', '39 ', '41 ']
 	}
 ];
 
-var order_list = [
-	{
-		clientID: 1,
-		name: "LALALA",
-		mail: "gaarson666@gmail.com",
-		dresses: [ 4, 5, 1 ]	
-	}
-];
+var category = {
+    'style': ["вечернее", "коктейльные", "выпускные", "этно", "ретро", "спортивный", "пляжный", "диско", "эко"],
+    'brand': ["estaline", "ladyform", "greencountry", "efectiv", "ray", "dejavu", "panas", "ertu", "malenkie"],
+    'season': ["весна-лето", "зима-осень"],
+};
+
+var order = {
+	orderName: [],
+	orderPrice: []
+};
 
 var View = React.createClass({
 	
+	getInitialState: function() {
+		return{
+			order: this.props.order,
+			orderName: order.orderName,
+			orderPrice: order.orderPrice		
+		}
+	},
+	
+	priceClick: function() {
+		this.setState({
+			orderName: order.orderName.push(name),
+			//orderPrice: order.orderPrice.push(price)
+		})
+	},
+
 	render: function() {
-		var id = this.props.data.id,
-			image = this.props.data.image,
+		var	image = this.props.data.image,
 			price = this.props.data.price,
 			size = this.props.data.size,
 			brand = this.props.data.brand,
@@ -92,78 +102,13 @@ var View = React.createClass({
 						<a href = "#"
 							onClick = {this.priceClick}
 							className = "priceClick" >
-						{price}</a>
+						{price}p </a>
 						<size>{size}</size>
 				</div>	
 				<p className = "name">{name}</p> 
 				<p className = "more">{style} {brand}</p>
 				<p className = "season"> {season} </p>
 			</div>
-		)	
-	}
-});
-
-var DressScroll = React.createClass({
-	
-	getInitialState: function() {
-		return {
-			centerDress: 1,		
-			leftSide: 0,
-			rightSide: 2
-		};
-	},
-	
-	rightClick: function(e) {
-		e.preventDefault();
-		this.setState({
-			leftSide: ++this.state.leftSide,
-			centerDress: ++this.state.centerDress,
-			rightSide: ++this.state.rightSide
-		});
-	},
-
-	leftClick: function(e) {
-		e.preventDefault();
-		this.setState({
-			leftSide: --this.state.leftSide,
-			centerDress: --this.state.centerDress,
-			rightSide: --this.state.rightSide
-		});
-	},
-
-	render: function () {
-		var data = this.props.data;
-		var leftSide = data.map (function(item, index) {
-			index = this.state.leftSide;
-			return (
-				<div key = {index}>
-					<View data = {item} />
-				</div>	
-			)
-		});
-		var rightSide = data.map(function(item, index) {
-			index = this.state.rightSide;
-			return (
-				<div key = {index}>
-					<View data = {item} />
-				</div>	
-			)
-		});
-		var listTemplate = data.map (function(item, index) {
-			index = this.centerDress;
-			return (
-				<div key = {index} className = "scroll">
-					<View data = {item} />
-				</div> 
-			)
-		});	
-		
-		return(
-			<div className = "scrollList">
-				{leftSide}
-				{listTemplate}
-				{rightSide}
-			</div>	
 		)	
 	}
 });
@@ -179,13 +124,12 @@ var DressList = React.createClass({
 		var dressTemplate = data.map(function(item, index) {
 
             if (category != '' && value != '' && item[category] != value) {
-
                 return false;
             }
 
 			return (
 				<li key = {index} >
-					<View data = {item} />
+					<View data = {item} />	
 				</li>
 			)	
 		});        	
@@ -196,6 +140,17 @@ var DressList = React.createClass({
 			</ul>
 		);
 	}		
+});
+
+var Orders = React.createClass({
+	
+    render: function() {
+
+        return(
+            <li data-order = {this.props.order}>
+			{this.props.value}</li>
+        )
+    }			
 });
 
 var Li = React.createClass({
@@ -222,13 +177,11 @@ var Li = React.createClass({
     }
 });
 
-var category = {
-    'style': ["вечернее", "коктейльные", "выпускные", "этно", "ретро", "спортивный", "пляжный", "диско", "эко"],
-    'brand': ["estaline", "ladyform", "greencountry", "efectiv", "ray", "dejavu", "panas", "ertu", "malenkie"],
-    'season': ["весна-лето", "зима-осень"]
-};
-
 var Nav = React.createClass({
+	
+	basketClick: function() {
+		
+	},
 
     handleUserClick: function(category, value) {
 
@@ -239,7 +192,7 @@ var Nav = React.createClass({
     },
 
     render: function() {
-
+		var order = this.props.order;
         var category = this.props.category;
         var self = this;
         var Style = category.style.map(function(item ,index){
@@ -266,6 +219,20 @@ var Nav = React.createClass({
 				onUserClick={self.handleUserClick} />
             )
         });
+		var orderName = order.orderName.map(function(item, index) { 
+			return(
+				<Orders data-order = "orderName"
+			   	value = {item}	
+				key = {index}  />	
+			)
+		});
+		var orderPrice = order.orderPrice.map(function(item, index) {
+			return(
+				<Orders data-order = "orderPrice"
+				value = {item}
+				key = {index} />
+			)
+		});
 
         return(
             <nav>
@@ -289,8 +256,8 @@ var Nav = React.createClass({
                     <li>
                         <a href="#" id = "basket">заказ</a>
                         <ul>
-                            <li><a href = "#" id = "basketList" className = "basketList">1</a></li><br/>
-                            <li><a href = "#" id = "form">оформить</a></li>
+							{orderName}{orderPrice}<br/>
+                            <li><a href = "#" >оформить</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -304,7 +271,7 @@ var App = React.createClass({
     getInitialState: function() {
 
         return {
-            category: '',
+		  	category: '',
             value: ''
         }
     },
@@ -312,6 +279,7 @@ var App = React.createClass({
     handleRender: function(category, value) {
 
         this.setState({
+
             category: category,
             value: value
         });
@@ -320,9 +288,16 @@ var App = React.createClass({
 	render: function() { 	
 		return (
 			<div className = "app">
-                <Nav category={category} onUserChange={this.handleRender} />
+                <Nav order = {order} 
+				category={category} 
+				onUserChange={this.handleRender} />
                 <article>
-                    <DressList data = {dress_list} category={category} category={this.state.category} value={this.state.value} />
+                    <DressList data = {dress_list} 
+					category={category}
+				    category={this.state.category} 
+				    value={this.state.value} 	
+					order = {order} 
+					order = {this.state.order} />
                 </article>
 			</div>
 		)
