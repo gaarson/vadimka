@@ -188,9 +188,25 @@ var Li = React.createClass({
 });
 
 var Nav = React.createClass({
-	
-	cartClick: function() {
-		
+	mixins: [ReactFireMixin],
+
+	componentWillMount: function() {
+		this.firebaseRef = firebase.database().ref("items");
+	    this.firebaseRef.on("child_added", function(dataSnapshot) {
+		   this.items.push(dataSnapshot.val());
+		   this.setState({
+				items: this.items
+		    });
+		}.bind(this));
+	},
+
+	cartClick: function(e) {
+		e.preventDefault();
+		var userData = prompt("введи свой email или номер телефона", "" );
+		this.firebaseRef.push({
+			user_data: this.userData
+		});
+	    this.setState({user_data: ""});	
 	},
 
     handleUserClick: function(category, value) {
@@ -231,21 +247,23 @@ var Nav = React.createClass({
         });
 		var orderName = order.orderName.map(function(item, index) { 
 			return(
-				<Orders data-order = "orderName"
+				<Orders className = "orderName"
+			   	data-order = "orderName"
 			   	value = {item}	
 				key = {index}  />	
 			)
 		});
 		var orderPrice = order.orderPrice.map(function(item, index) {
 			return(
-				<Orders data-order = "orderPrice"
+				<Orders className = "orderPrice"
+				data-order = "orderPrice"
 				value = {item}
 				key = {index} />
 			)
 		});
-
-        return(
-            <nav>
+        
+		return (
+			<nav>
                 <ul id="ddmenu">
                     <li>
                         <a href="#">стиль</a>
@@ -266,8 +284,8 @@ var Nav = React.createClass({
                     <li>
                         <a href="#" id = "basket">заказ</a>
                         <ul>
-							{orderName}{orderPrice}<br/>
-                            <li><a href = "#" >оформить</a></li>
+							<p>{orderName}{orderPrice}</p>
+                            <li><a href = "#" onClick = {this.cartClick}>оформить</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -12,9 +12,21 @@
 	<script src = "js/react/browser.min.js"></script>
 	<script type = "text/babel" src = "js/main.js"></script>	
 	<!react>
+	<script src="https://www.gstatic.com/firebasejs/3.0.4/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/reactfire/0.6.0/reactfire.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 <body>
+	<script>
+		var config = {
+			apiKey: "AIzaSyAyrYIi_FSCz0z-J_Vr4gokLXOk8IHiFew",
+			authDomain: "vadimka.firebaseapp.com",
+			databaseURL: "https://vadimka.firebaseio.com",
+			storageBucket: "project-4888348749380433251.appspot.com",
+		};
+		  
+		firebase.initializeApp(config);
+	</script>
 	<div id="page">
 		<header>
 			<a href = "#" onClick = "window.location.reload()"><h1>Танго</h1>
