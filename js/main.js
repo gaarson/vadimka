@@ -191,22 +191,27 @@ var Nav = React.createClass({
 	mixins: [ReactFireMixin],
 
 	componentWillMount: function() {
-		this.firebaseRef = firebase.database().ref("items");
+		var ref = firebase.database().ref("items");
+		this.bindAsArray(ref, "items");
+		this.firebaseRef = firebase.database().ref("user_data");
 	    this.firebaseRef.on("child_added", function(dataSnapshot) {
-		   this.items.push(dataSnapshot.val());
+		   this.users_data.push(dataSnapshot.val());
 		   this.setState({
-				items: this.items
+			   users_data: this.users_data
 		    });
 		}.bind(this));
 	},
 
 	cartClick: function(e) {
 		e.preventDefault();
-		var userData = prompt("введи свой email или номер телефона", "" );
+		var users_info = [];
+		var userData = prompt("введи свой email или номер телефона");
+		users_info.push(userData);
 		this.firebaseRef.push({
-			user_data: this.userData
+			info: users_info,
+			dresses: this.props.order.orderName
 		});
-	    this.setState({user_data: ""});	
+	    this.setState({info: ""});	
 	},
 
     handleUserClick: function(category, value) {
